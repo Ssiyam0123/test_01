@@ -1,16 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useSignUp, useSignIn } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useSignUp, useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function CustomSignUpForm() {
-  const { isLoaded: signUpLoaded, signUp, setActive: setSignUpActive } = useSignUp();
+  const {
+    isLoaded: signUpLoaded,
+    signUp,
+    setActive: setSignUpActive,
+  } = useSignUp();
   const { isLoaded: signInLoaded, signIn } = useSignIn();
   const [pendingVerification, setPendingVerification] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
   const router = useRouter();
 
   const handleSignUp = async () => {
@@ -18,11 +22,11 @@ export default function CustomSignUpForm() {
 
     try {
       await signUp.create({ emailAddress: email, password });
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (err) {
       console.error(err);
-      alert(err.errors?.[0]?.message || 'Signup failed');
+      alert(err.errors?.[0]?.message || "Signup failed");
     }
   };
 
@@ -32,15 +36,15 @@ export default function CustomSignUpForm() {
     try {
       const result = await signUp.attemptEmailAddressVerification({ code });
 
-      if (result.status === 'complete') {
+      if (result.status === "complete") {
         await setSignUpActive({ session: result.createdSessionId });
-        router.push('/'); // redirect after success
+        router.push("/"); // redirect after success
       } else {
-        alert('Incorrect code');
+        alert("Incorrect code");
       }
     } catch (err) {
       console.error(err);
-      alert(err.errors?.[0]?.message || 'Verification failed');
+      alert(err.errors?.[0]?.message || "Verification failed");
     }
   };
 
@@ -48,12 +52,13 @@ export default function CustomSignUpForm() {
     if (!signInLoaded) return;
 
     try {
-      await signIn.authenticateWithRedirect({
-        strategy: 'oauth_google',
-        redirectUrl: '/', // Or wherever you want users to land after login
+      const resis = await signIn.authenticateWithRedirect({
+        strategy: "oauth_google",
+        redirectUrl: "/", // Or wherever you want users to land after login
       });
+      console.log("collecting res : ", resis);
     } catch (err) {
-      console.error('Google login failed', err);
+      console.error("Google login failed", err);
     }
   };
 

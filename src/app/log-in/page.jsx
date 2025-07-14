@@ -24,6 +24,9 @@ export default function LoginPage() {
       console.log("✅ Logged in:", result);
       await setActive({ session: result.createdSessionId });
 
+        setEmail("");
+      setPassword("");
+
       // Optional: redirect to dashboard or homepage
       // router.push("/dashboard");
     } catch (error) {

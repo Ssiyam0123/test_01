@@ -1,5 +1,5 @@
 import CustomSignUpForm from '@/components/CustomSignUpForm'
-import NewForm from '@/components/NewForm'
+import NewForm from '@/components/SignUpForm'
 import React from 'react'
 
 export default function SignUpPage() {
